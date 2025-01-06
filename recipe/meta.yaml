@@ -10,6 +10,8 @@ source:
   sha256: 463fd582394b66d6730a40c9d2968942bee5c0698cac2e556f37ca247ad51f88
 
 build:
+  # pandas<2 isn't built for py>311
+  skip: True  # [py>311]
   script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
   number: 0
 
