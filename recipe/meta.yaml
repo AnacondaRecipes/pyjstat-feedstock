@@ -1,0 +1,56 @@
+{% set name = "pyjstat" %}
+{% set version = "2.4.0" %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+  url: https://github.com/predicador37/{{ name }}/archive/refs/tags/{{ version }}.tar.gz
+  sha256: 463fd582394b66d6730a40c9d2968942bee5c0698cac2e556f37ca247ad51f88
+
+build:
+  # pandas<2 isn't built for py>311
+  skip: True  # [py>311]
+  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+  number: 0
+
+requirements:
+  host:
+    - python
+    - pip
+    - setuptools
+    - wheel
+  run:
+    - python
+    # Upperbound for pandas since the source uses DataFrame.append(), which is removed
+    # in 2.0.0 (https://pandas.pydata.org/docs/whatsnew/v2.0.0.html#removal-of-prior-version-deprecations-changes)
+    - pandas >=1.0.0,<2
+    - requests >=2.23.0
+
+test:
+  requires:
+    - pip
+    - pytest
+  source_files:
+    - pyjstat/test
+  imports:
+    - pyjstat
+  commands:
+    - pip check
+    - pytest -v pyjstat/test
+
+about:
+  home: https://github.com/predicador37/pyjstat
+  dev_url: https://github.com/predicador37/pyjstat
+  doc_url: https://pythonhosted.org/pyjstat/
+  summary: Library to handle JSON-stat data in python using pandas DataFrames.
+  description: pyjstat is a python library for JSON-stat formatted data manipulation which allows reading and writing JSON-stat
+    format with python,using the DataFrame structures provided by the widely accepted pandas library.
+  license: Apache-2.0
+  license_family: APACHE
+  license_file: LICENSE.txt
+
+extra:
+  recipe-maintainers:
+    - mohamedlarbisentissi
