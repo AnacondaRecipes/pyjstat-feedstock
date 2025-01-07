@@ -25,8 +25,8 @@ requirements:
     - python
     # Upperbound for pandas since the source uses DataFrame.append(), which is removed
     # in 2.0.0 (https://pandas.pydata.org/docs/whatsnew/v2.0.0.html#removal-of-prior-version-deprecations-changes)
-    - pandas <2
-    - requests
+    - pandas >=1.0.0,<2
+    - requests >=2.23.0
 
 test:
   requires:
